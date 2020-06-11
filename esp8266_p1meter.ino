@@ -6,7 +6,7 @@
 #include "settings.h"
 
 WiFiClient espClient;
-PubSubClient mqtt_client(espClient);
+PubSubClient mqttClient(espClient);
 
 void setup()
 {
@@ -15,16 +15,17 @@ void setup()
   digitalWrite(LED_BUILTIN, LOW);
 
   Serial.begin(BAUD_RATE, SERIAL_8N1, SERIAL_RX_ONLY, 3, true);
-  
+
   WiFi.begin(WIFI_SSID, WIFI_PASS);
   while (WiFi.status() != WL_CONNECTED) {
     blinkLed(20, 50); // Blink fast to indicate no WiFi connection
     delay(500);
   }
 
-  setup_ota();
+  setupOTA();
+  setupDataReadout();
 
-  mqtt_client.setServer(MQTT_HOST, atoi(MQTT_PORT));
+  mqttClient.setServer(MQTT_HOST, atoi(MQTT_PORT));
   blinkLed(5, 500); // Blink 5 times to indicate end of setup
 }
 
@@ -42,7 +43,7 @@ void loop()
   ArduinoOTA.handle();
   long now = millis();
 
-  if (!mqtt_client.connected())
+  if (!mqttClient.connected())
   {
     long now = millis();
 
@@ -50,7 +51,7 @@ void loop()
     {
       LAST_RECONNECT_ATTEMPT = now;
 
-      if (mqtt_reconnect())
+      if (mqttReconnect())
       {
         LAST_RECONNECT_ATTEMPT = 0;
       }
@@ -58,8 +59,11 @@ void loop()
   }
   else
   {
-    mqtt_client.loop();
+    mqttClient.loop();
   }
 
-  read_p1_serial();
+  if (now - LAST_UPDATE_SENT > UPDATE_INTERVAL)
+  {
+    readP1Serial();
+  }
 }

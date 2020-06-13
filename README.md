@@ -12,11 +12,9 @@ Then I noticed the project of [WhoSayIn](https://github.com/WhoSayIn/esp8266_dsm
 
 With this fork, I want to accomplish the following:
 - Combine the projects mentioned above in a minimalistic setup for the newer DSMR 5.0 smart meters (at the time of writing: 402 vs 681 lines of code, tested on the `ISKRA AM550`).
-- Separate code in multiple files for readability.
+- Separate code in multiple files for readability (the Arduino IDE loads and compiles these in alphabetic order after the project main .ino file).
 - Add solar panel meter: read out delivered energy.
-- Add an alternative data quality (DQ) check for the CRC check. See the `getValueWithDqCheck` method.
-
-To add to the last point: I don't exactly know why, but the CRC check never worked for me. It always said that the data read out from the serial port was corrupted. When I turned this off, I noticed that most of the time the data is actually fine, but it sometimes drops back to zero or some lower value. This of course shouldn't be possible (you can't suddenly have used less energy than you did in the past), so I built a check into the code to see whether the current value is higher than the previous value. If that's not the case, the last known (previous) value is send again.
+- In a previous version of the code, I had trouble getting the CRC to work. This might be the case for you too at some point in the future, so I have built an option in the settings to turn this on and off. Most of the time it worked fine for me without the CRC, but it had occasional "drops" in the data, either back to a lower value or all the way to zero. This is very inconvenient when working with the [Utility Meter](https://www.home-assistant.io/integrations/utility_meter/) of Home Assistant, so I have built extra data quality checks for this. However, since the CRC now seems to be working, I have removed the code. If you do experience this problem and you want to have the custom DQ checks build in your code, then find the method `getValueWithDqCheck` in the master branch at the commit [3c9311975521f6e940884f00f72184ff8944cb24](https://github.com/jhockx/esp8266_p1meter/tree/3c9311975521f6e940884f00f72184ff8944cb24). Open a PR if you want it back in the code.
 
 ## Setup
 This setup requires:
@@ -100,7 +98,7 @@ sensors/power/p1meter/short_power_peaks
 Use this [example](https://raw.githubusercontent.com/daniel-jong/esp8266_p1meter/master/assets/p1_sensors.yaml) for home assistant's `sensor.yaml`
 
 ## Known limitations and issues
-In case you power a Wemos D1 mini by the `ISKRA AM550` (and possibly other DSMR 5.0 meters), every so often the device might loose the connection to the MQTT server for a couple of seconds. I believe the device also resets itself, so this probably means that a temporary power loss is causing the loose connection (maybe the meter stops providing current for a second or something). If this happens and you are using the custom DQ checks I built (`getValueWithDqCheck` method), the last know/previous value is of course zero, and you can thus still encounter drops to zero, even with the custom DQ fix. Therefore I implemented a "power-loss-reset fix", by adding an if statement before sending data to the MQTT broker. Assuming you initialize all the values with zero, the if statement checks if the value being send is larger than zero.
+In case you power a Wemos D1 mini by the `ISKRA AM550` (and possibly other DSMR 5.0 meters), every so often the device might lose the connection to the MQTT server for a couple of seconds. I believe the device also resets itself, so this probably means that a temporary power loss is causing the loose connection (maybe the meter stops providing current for a second or something). Or it might be the case that your esp8266 device can't process and send the data fast enough (that's why it might be best to set the CPU to 160 MHz). You can check if your device disconnects every so often in the logs of your MQTT broker.
 
 ## Thanks to
 

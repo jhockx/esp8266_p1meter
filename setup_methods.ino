@@ -27,7 +27,6 @@ void setupDataReadout()
     strcpy(telegramObjects[1].code, "1-0:1.8.2");
     telegramObjects[1].endChar = '*';
 
-    // ADDED DURING MERGE ------------------------------------------
     // 1-0:1.8.1(000992.992*kWh)
     // 1-0:1.8.1 =  (DSMR v5.0)
     telegramObjects[2].name = "delivered_low_tarif";
@@ -45,7 +44,6 @@ void setupDataReadout()
     telegramObjects[4].name = "gas_meter_m3";
     strcpy(telegramObjects[4].code, "0-1:24.2.1");
     telegramObjects[4].endChar = '*';
-    // END ADDED DURING MERGE ------------------------------------------
 
     // 1-0:1.7.0(00.424*kW) Actueel verbruik
     // 1-0:1.7.x = Electricity consumption actual usage (DSMR v5.0)

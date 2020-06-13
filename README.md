@@ -10,8 +10,9 @@ The project of [daniel-jong](https://github.com/daniel-jong/esp8266_p1meter) swi
 
 Then I noticed the project of [WhoSayIn](https://github.com/WhoSayIn/esp8266_dsmr2mqtt), that takes a much more minimalistic approach, which I liked. However, I discovered this project was also designed for the DSMR 4.0 meters.
 
-With this fork, I want to accomplish the following:
-- Combine the projects mentioned above in a minimalistic setup for the newer DSMR 5.0 smart meters (at the time of writing: 402 vs 681 lines of code, tested on the `ISKRA AM550`).
+**With this fork, I want to accomplish the following:**
+- Combine the projects mentioned above in a minimalistic setup for the newer DSMR 5.0 smart meters (at the time of writing: 476 vs 681 lines of code, tested on the `ISKRA AM550`).
+- Improve the code (also thanks to [RoySpringer](https://github.com/RoySpringer)).
 - Separate code in multiple files for readability (the Arduino IDE loads and compiles these in alphabetic order after the project main .ino file).
 - Add solar panel meter: read out delivered energy.
 - In a previous version of the code, I had trouble getting the CRC to work. This might be the case for you too at some point in the future, so I have built an option in the settings to turn this on and off. Most of the time it worked fine for me without the CRC, but it had occasional "drops" in the data, either back to a lower value or all the way to zero. This is very inconvenient when working with the [Utility Meter](https://www.home-assistant.io/integrations/utility_meter/) of Home Assistant, so I have built extra data quality checks for this. However, since the CRC now seems to be working, I have removed the code. If you do experience this problem and you want to have the custom DQ checks build in your code, then find the method `getValueWithDqCheck` in the master branch at the commit [3c9311975521f6e940884f00f72184ff8944cb24](https://github.com/jhockx/esp8266_p1meter/tree/3c9311975521f6e940884f00f72184ff8944cb24). Open a PR if you want it back in the code.

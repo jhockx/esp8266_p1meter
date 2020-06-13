@@ -40,7 +40,6 @@ struct TelegramDecodedObject
 
 struct TelegramDecodedObject telegramObjects[NUMBER_OF_READOUTS];
 
-// The CRC check didn't work for me: all data was supposedly corrupt and thus nothing was send
-// You can turn it on and off here
-bool useCRC = false;
+// You can turn the CRC on and off here
+bool useCRC = true;
 unsigned int currentCRC = 0;

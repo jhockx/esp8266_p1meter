@@ -108,7 +108,7 @@ bool decodeTelegram(int len)
     currentCRC = CRC16(currentCRC, (unsigned char *)telegram, len);
   }
 
-  // Loops throug all the telegramObjects to find the code in the telegram line
+  // Loops through all the telegramObjects to find the code in the telegram line
   // If it finds the code the value will be stored in the object so it can later be send to the mqtt broker
   for (int i = 0; i < NUMBER_OF_READOUTS; i++)
   {

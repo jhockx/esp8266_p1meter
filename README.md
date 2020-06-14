@@ -96,7 +96,7 @@ sensors/power/p1meter/short_power_peaks
 
 ### Home Assistant Configuration
 
-Use this [example](https://raw.githubusercontent.com/daniel-jong/esp8266_p1meter/master/assets/p1_sensors.yaml) for home assistant's `sensor.yaml`
+Checkout my [Home Assistant configuration repository](https://github.com/jhockx/home-assistant-configuration) for all my Home Assistant configurations, or just checkout [the setup of the MQTT sensors](https://github.com/jhockx/home-assistant-configuration/blob/master/GWL%20monitoring.md#electricitygas-usage-from-the-dsmr50). Feel free to adjust the configuration to your needs.
 
 ## Known limitations and issues
 In case you power a Wemos D1 mini by the `ISKRA AM550` (and possibly other DSMR 5.0 meters), every so often the device might lose the connection to the MQTT server for a couple of seconds. I believe the device also resets itself, so this probably means that a temporary power loss is causing the loose connection (maybe the meter stops providing current for a second or something). Or it might be the case that your esp8266 device can't process and send the data fast enough (that's why it might be best to set the CPU to 160 MHz). You can check if your device disconnects every so often in the logs of your MQTT broker.
